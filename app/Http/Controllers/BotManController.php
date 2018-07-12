@@ -6,7 +6,7 @@ use BotMan\BotMan\BotMan;
 use Illuminate\Http\Request;
 use App\Conversations\ExampleConversation;
 use Illuminate\Support\Facades\DB;
-
+use GuzzleHttp\Client;
 
 class BotManController extends Controller
 {
@@ -17,9 +17,11 @@ class BotManController extends Controller
     {
         $botman = app('botman');
 
-        $botman->hears('Hello', function ($bot, $limit) {
-            $result = $this->getMembers($limit);
-            $bot->reply('Hello');
+        $botman->hears('hello {limit}', function ($bot, $limit) {
+            $results = $this->getMembers($limit);
+            foreach($results as $result) {
+                $bot->reply($result);
+            }
         });
 
         // Fallback in case of wrong command
@@ -49,7 +51,11 @@ class BotManController extends Controller
 
     protected function getMembers($limit)
     {
-        $data = DB::table('members')->take($limit)->get();
+        $data = [];
+        $members = DB::table('members')->take($limit)->get();
+        foreach ($members as $member){
+            array_push($data, $member->firstName);
+        }
 
         return $data;
     }
