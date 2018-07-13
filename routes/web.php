@@ -17,3 +17,14 @@ Route::get('/', function () {
 
 Route::match(['get', 'post'], '/botman', 'BotManController@handle');
 Route::get('/botman/tinker', 'BotManController@tinker');
+
+Route::post('/slack', function(\Illuminate\Http\Request $request){
+
+    $payload = $request->json();
+
+    if ($payload->get('type') === 'url_verification') {
+        return $payload->get('challenge');
+    }
+
+    // Bot logic will be placed here
+};
