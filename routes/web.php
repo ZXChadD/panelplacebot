@@ -27,4 +27,4 @@ Route::post('/slack', function(\Illuminate\Http\Request $request){
     }
 
     // Bot logic will be placed here
-};
+});
